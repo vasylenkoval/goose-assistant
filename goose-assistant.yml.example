@@ -1,0 +1,2 @@
+path: 'migration/db/migrations'
+versionType: 'timestamp'
