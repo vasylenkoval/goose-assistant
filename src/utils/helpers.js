@@ -1,23 +1,4 @@
-const { VERSION_TYPES, TRIGGER } = require('./constants');
-
-function getIsValidConfig(config) {
-    return !!(
-        config &&
-        config.path &&
-        typeof config.path === 'string' &&
-        Object.values(VERSION_TYPES).includes(config.versionType)
-    );
-}
-
-function onCommand(command, ctx, config, callback) {
-    const {
-        comment: { body = '' },
-    } = ctx.payload;
-
-    if (body.includes(`${TRIGGER} ${command}`)) {
-        return callback(ctx, config);
-    }
-}
+const { VERSION_TYPES } = require('./constants');
 
 function getStaleMigrationNames(baseMigrations, headMigrations) {
     const headMigrationsNamesSet = new Set(headMigrations.map((migration) => migration.name));
@@ -62,7 +43,7 @@ function parseGooseTimestamp(str) {
 
 function formatGooseTimestamp(timestamp) {
     const year = timestamp.getUTCFullYear();
-    const month = timestamp.getUTCMonth() + 1;
+    const month = timestamp.getUTCMonth() + 1; // jan = 0 to jan = 1
     const day = timestamp.getUTCDate();
     const hours = timestamp.getUTCHours();
     const minutes = timestamp.getUTCMinutes();
@@ -104,8 +85,6 @@ function bumpMigrationVersion(args = {}) {
 }
 
 module.exports = {
-    onCommand,
-    getIsValidConfig,
     getStaleMigrationNames,
     getIsHeadMigrationsStale,
     extractLatestMigrationVersion,

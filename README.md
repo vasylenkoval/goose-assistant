@@ -1,6 +1,6 @@
 # goose-assistant
 
-> A GitHub App built with [Probot](https://github.com/probot/probot) that helps manage [Goose](https://github.com/pressly/goose) migration versions
+A GitHub App built with [Probot](https://github.com/probot/probot) that helps to manage [Goose](https://github.com/pressly/goose) migration versions.
 
 ## Setup
 

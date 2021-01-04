@@ -5,6 +5,7 @@ const {
     extractLatestMigrationVersion,
     bumpMigrationVersion,
 } = require('./utils/helpers');
+const { PROTECTED_BRANCHES } = require('./utils/constants');
 
 module.exports = async (ctx, config) => {
     const { baseResp: baseMigrations, headResp: headMigrations } = await getPathContents(
@@ -12,10 +13,14 @@ module.exports = async (ctx, config) => {
         config.path
     );
 
+    const {
+        sender: { login: senderLogin },
+    } = ctx.payload;
+
     if (!getIsHeadMigrationsStale(baseMigrations, headMigrations)) {
-        ctx.github.issues.createComment(
+        ctx.octokit.issues.createComment(
             ctx.issue({
-                body: `@${senderUsername} couldn't find any stale migrations.`,
+                body: `@${senderLogin} couldn't find any stale migrations on the head branch.`,
             })
         );
 
@@ -35,6 +40,16 @@ module.exports = async (ctx, config) => {
             }
         );
 
+        if (Object.values(PROTECTED_BRANCHES).includes(pullRequest.head.ref)) {
+            ctx.octokit.issues.createComment(
+                ctx.issue({
+                    body: `@${senderLogin} seems like your head branch is one of the protected branches. I can only push fixes to your personal branch.`,
+                })
+            );
+
+            return;
+        }
+
         const updatedMigrationName = bumpMigrationVersion({
             name: migrationName,
             latestVersion,
@@ -42,12 +57,10 @@ module.exports = async (ctx, config) => {
             ordinal: Number(index) + 1,
         });
 
-        const { repository } = ctx.payload;
-
         await ctx.octokit.repos.deleteFile({
             message: `goose-assistant: deleted ${migrationName}`,
-            owner: repository.owner.login,
-            repo: repository.name,
+            owner: ctx.payload.repository.owner.login,
+            repo: ctx.payload.repository.name,
             path: `${config.path}/${migrationName}`,
             sha: migration.sha,
             branch: pullRequest.head.ref,
@@ -55,8 +68,8 @@ module.exports = async (ctx, config) => {
 
         await ctx.octokit.repos.createOrUpdateFileContents({
             message: `goose-assistant: renamed ${migrationName} to ${updatedMigrationName}`,
-            owner: repository.owner.login,
-            repo: repository.name,
+            owner: ctx.payload.repository.owner.login,
+            repo: ctx.payload.repository.name,
             path: `${config.path}/${updatedMigrationName}`,
             content: migration.content,
             branch: pullRequest.head.ref,

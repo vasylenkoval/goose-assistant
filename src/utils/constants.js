@@ -5,8 +5,14 @@ module.exports = {
         sequential: 'sequential',
     },
     TRIGGER: '/goose',
+    BOT_LOGIN: 'goose-assistant[bot]',
     COMMANDS: {
         check: 'check',
         fix: 'fix',
+    },
+    PROTECTED_BRANCHES: {
+        master: 'master',
+        main: 'main',
+        develop: 'develop',
     },
 };

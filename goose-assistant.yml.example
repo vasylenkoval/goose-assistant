@@ -1,2 +1,2 @@
-path: 'migration/db/migrations'
+path: 'db/migrations'
 versionType: 'timestamp'

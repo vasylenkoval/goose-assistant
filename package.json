@@ -1,13 +1,13 @@
 {
   "name": "goose-assistant",
   "version": "1.0.0",
-  "private": true,
-  "description": "probot app that helps manage goose migrations sequence",
+  "private": false,
+  "description": "Probot app that helps to manage your goose migrations",
   "author": "Valentyn Vasylenko <vasylenko.valentyn@gmail.com>",
   "license": "ISC",
   "repository": "https://github.com/vasylenkoval/goose-assistant.git",
   "homepage": "https://github.com/vasylenkoval/goose-assistant",
-  "bugs": "https://github.com/vasylenkoval/goosee-assistant/issues",
+  "bugs": "https://github.com/vasylenkoval/goose-assistant/issues",
   "keywords": [
     "probot",
     "github",
@@ -20,7 +20,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "probot": "^10.9.3"
+    "probot": "^11.0.1"
   },
   "devDependencies": {
     "jest": "^26.4.0",

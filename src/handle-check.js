@@ -9,13 +9,13 @@ module.exports = async (ctx, config) => {
     );
 
     const {
-        sender: { login: senderUsername },
+        sender: { login: senderLogin },
     } = ctx.payload;
 
     if (getIsHeadMigrationsStale(baseMigrations, headMigrations)) {
-        ctx.github.issues.createComment(
+        ctx.octokit.issues.createComment(
             ctx.issue({
-                body: `@${senderUsername} one or more migrations are out of sync with the base branch. You can update the versions manually or use ${
+                body: `@${senderLogin} one or more migrations are out of sync with the base branch. You can update the versions manually or use ${
                     '`' + TRIGGER + ' ' + COMMANDS.fix + '`'
                 } to update the versions automatically.`,
             })
@@ -24,9 +24,9 @@ module.exports = async (ctx, config) => {
         return;
     }
 
-    ctx.github.issues.createComment(
+    ctx.octokit.issues.createComment(
         ctx.issue({
-            body: `@${senderUsername} couldn't find any stale migrations on the head branch.`,
+            body: `@${senderLogin} couldn't find any stale migrations on the head branch.`,
         })
     );
 
