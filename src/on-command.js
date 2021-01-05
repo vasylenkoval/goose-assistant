@@ -1,5 +1,5 @@
 const getConfig = require('./get-config');
-const { TRIGGER, BOT_LOGIN } = require('./utils/constants');
+const { BOT_USERNAME } = require('./utils/constants');
 
 module.exports = async (command, ctx, callback) => {
     const {
@@ -7,7 +7,7 @@ module.exports = async (command, ctx, callback) => {
         sender: { login: senderLogin },
     } = ctx.payload;
 
-    if (senderLogin !== BOT_LOGIN && body.includes(`${TRIGGER} ${command}`)) {
+    if (senderLogin !== BOT_USERNAME && body.includes(command)) {
         const [config, isValid] = await getConfig(ctx);
 
         if (!isValid) {

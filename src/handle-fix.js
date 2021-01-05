@@ -67,7 +67,7 @@ module.exports = async (ctx, config) => {
         });
 
         await ctx.octokit.repos.createOrUpdateFileContents({
-            message: `goose-assistant: renamed ${migrationName} to ${updatedMigrationName}`,
+            message: `goose-assistant: created ${updatedMigrationName}`,
             owner: ctx.payload.repository.owner.login,
             repo: ctx.payload.repository.name,
             path: `${config.path}/${updatedMigrationName}`,

@@ -1,6 +1,6 @@
 const getPathContents = require('./get-path-contents');
-const { getIsHeadMigrationsStale } = require('./utils/helpers');
-const { COMMANDS, TRIGGER } = require('./utils/constants');
+const { getStaleMigrationNames, extractLatestMigrationVersion } = require('./utils/helpers');
+const { COMMANDS } = require('./utils/constants');
 
 module.exports = async (ctx, config) => {
     const { baseResp: baseMigrations, headResp: headMigrations } = await getPathContents(
@@ -12,12 +12,19 @@ module.exports = async (ctx, config) => {
         sender: { login: senderLogin },
     } = ctx.payload;
 
-    if (getIsHeadMigrationsStale(baseMigrations, headMigrations)) {
+    const staleMigrationNames = getStaleMigrationNames(baseMigrations, headMigrations);
+
+    if (staleMigrationNames.length) {
         ctx.octokit.issues.createComment(
             ctx.issue({
                 body: `@${senderLogin} one or more migrations are out of sync with the base branch. You can update the versions manually or use ${
-                    '`' + TRIGGER + ' ' + COMMANDS.fix + '`'
-                } to update the versions automatically.`,
+                    '`' + COMMANDS.fix + '`'
+                } to update the versions automatically. \n\n **Your migrations:** \n>${staleMigrationNames.join(
+                    '\n\t-'
+                )} \n\n **Latest version on the base branch:** \n>${extractLatestMigrationVersion(
+                    baseMigrations,
+                    headMigrations
+                )}`,
             })
         );
 

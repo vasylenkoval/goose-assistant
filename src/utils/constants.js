@@ -4,11 +4,10 @@ module.exports = {
         timestamp: 'timestamp',
         sequential: 'sequential',
     },
-    TRIGGER: '/goose',
-    BOT_LOGIN: 'goose-assistant[bot]',
+    BOT_USERNAME: 'goose-assistant[bot]',
     COMMANDS: {
-        check: 'check',
-        fix: 'fix',
+        check: '/goose-check',
+        fix: '/goose-fix',
     },
     PROTECTED_BRANCHES: {
         master: 'master',
