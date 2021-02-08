@@ -2,6 +2,8 @@
 
 A GitHub App built with [Probot](https://github.com/probot/probot) that helps to manage [Goose](https://github.com/pressly/goose) migration versions.
 
+![Usage](https://user-images.githubusercontent.com/28285782/107252475-61038980-6a03-11eb-932c-dc1af6d0e709.png)
+
 ## Setup
 
 ```sh
